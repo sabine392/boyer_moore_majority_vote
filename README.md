@@ -25,3 +25,10 @@ This library provides only the detection pass. It keeps a single leader and a ba
 ## Edge cases
 
 The candidate after an empty stream is `None`. Feeding `None` as a real element value is supported and is distinct from having fed nothing. When no strict majority exists, the returned candidate is arbitrary with respect to majority semantics — it is one of the observed elements, selected by stream order, but it is not guaranteed to be the most frequent element.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
